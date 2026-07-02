@@ -17,12 +17,7 @@ export default function AnalyzingPanel({ usesMcp, usesRag }: AnalyzingPanelProps
   ];
 
   return (
-    <div style={{
-      background: '#fff', border: '1px solid var(--color-border)',
-      borderRadius: 16, padding: 40,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      minHeight: 420, animation: 'fadeUp .4s ease',
-    }}>
+    <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center min-h-[420px] animate-fade-up">
       {/* Spinner */}
       <div style={{
         width: 44, height: 44, borderRadius: '50%',

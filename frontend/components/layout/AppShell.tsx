@@ -2,6 +2,7 @@
 
 export type AppView = 'workspace' | 'dashboard' | 'settings';
 
+import { useState } from 'react';
 import Sidebar from './Sidebar';
 import Topbar  from './Topbar';
 import type { UserProfile } from '@/types';
@@ -31,21 +32,34 @@ export default function AppShell({
   sessions, activeSessionId, onSession,
   crumbLeaf, children,
 }: AppShellProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-bg-base)', fontFamily: "'Outfit', sans-serif" }}>
+    <div className="flex min-h-screen bg-[var(--color-bg-base)] font-sans relative">
       <Sidebar
         user={user}
         view={view}
-        onView={onView}
-        onNewScan={onNewScan}
+        onView={(v) => { onView(v); setIsMobileMenuOpen(false); }}
+        onNewScan={() => { onNewScan(); setIsMobileMenuOpen(false); }}
         onLogout={onLogout}
         sessions={sessions}
         activeSessionId={activeSessionId}
-        onSession={onSession}
+        onSession={(id) => { onSession(id); setIsMobileMenuOpen(false); }}
+        isMobileOpen={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+        isDesktopOpen={isDesktopSidebarOpen}
+        onToggleDesktop={() => setIsDesktopSidebarOpen(prev => !prev)}
       />
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <Topbar view={view} crumbLeaf={crumbLeaf} />
-        <main style={{ flex: 1, overflowY: 'auto' }}>
+      <div className="flex-1 min-w-0 flex flex-col transition-all duration-300">
+        <Topbar 
+          view={view} 
+          crumbLeaf={crumbLeaf} 
+          onMenuClick={() => setIsMobileMenuOpen(true)}
+          isDesktopOpen={isDesktopSidebarOpen}
+          onToggleDesktop={() => setIsDesktopSidebarOpen(prev => !prev)}
+        />
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

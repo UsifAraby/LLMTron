@@ -296,13 +296,13 @@ export default function Home() {
           </div>
         </header>
 
-        <main style={{ maxWidth: 480, margin: '80px auto', padding: '0 24px' }}>
+        <main style={{ maxWidth: 480, margin: '20px auto', padding: '0 12px' }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h1 style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>
               Analyze your AI agent
             </h1>
             <p style={{ fontSize: 15, color: '#64748b', marginTop: 10, lineHeight: 1.6 }}>
-              Describe what your agent does and we'll test it against the MAESTRO &amp; ATFAA threat frameworks.
+              Describe what your agent does and we'll test it.
             </p>
           </div>
           <AuthModal onAuthenticated={handleAuthenticated} />
@@ -334,47 +334,38 @@ export default function Home() {
 
       {/* ---- Workspace ---- */}
       {view === 'workspace' && (
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: phase === 'input' ? 'column' : 'row',
-          alignItems: phase === 'input' ? 'center' : 'flex-start',
-          justifyContent: phase === 'input' ? 'flex-start' : undefined,
-          gap: 24,
-          padding: phase === 'input' ? '56px 32px 64px' : '24px',
-          maxWidth: phase !== 'input' ? 1180 : undefined,
-          margin: phase !== 'input' ? '0 auto' : undefined,
-          width: '100%',
-        }}>
+        <div className={`
+          flex-1 flex w-full
+          ${phase === 'input' 
+            ? 'flex-col items-center justify-start gap-6 pt-2 pb-16 px-4 md:pt-2 md:px-8' 
+            : 'flex-col md:flex-row items-start gap-6 p-4 md:p-6 max-w-[1180px] mx-auto'}
+        `}>
 
           {/* Hero — input phase only */}
           {phase === 'input' && (
-            <div style={{ textAlign: 'center', maxWidth: 560, animation: 'fadeUp .4s ease' }}>
+            <div style={{ textAlign: 'center', maxWidth: 640, animation: 'fadeUp .4s ease' }}>
               <div style={{
-                width: 56, height: 56, borderRadius: 16,
+                width: 96, height: 96, borderRadius: 24,
                 background: 'var(--color-accent-soft)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 18px',
+                margin: '5px auto 5px',
               }}>
-                <Shield size={28} color="var(--color-accent)" />
+                <Shield size={60} color="var(--color-accent)" />
               </div>
               <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>
                 Analyze your AI agent
               </div>
               <div style={{ fontSize: 15, color: '#64748b', marginTop: 10, lineHeight: 1.6 }}>
-                Describe what your agent does and we'll test it against the MAESTRO &amp; ATFAA threat frameworks.
+                Describe what your agent does and we'll test it.
               </div>
             </div>
           )}
 
           {/* Form card — stays sticky left when in results phase */}
-          <div style={{
-            width: phase === 'input' ? '100%' : 360,
-            maxWidth: phase === 'input' ? 560 : undefined,
-            flexShrink: 0,
-            position: phase === 'results' ? 'sticky' : undefined,
-            top: phase === 'results' ? 80 : undefined,
-          }}>
+          <div className={`
+            shrink-0 w-full
+            ${phase === 'input' ? 'max-w-[640px]' : 'md:w-[360px] md:sticky md:top-10'}
+          `}>
             <div style={{
               background: '#fff',
               border: '1px solid var(--color-border)',

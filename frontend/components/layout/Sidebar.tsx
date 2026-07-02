@@ -20,6 +20,10 @@ interface SidebarProps {
   sessions: ScanSession[];
   activeSessionId: string | null;
   onSession: (id: string) => void;
+  isMobileOpen: boolean;
+  onCloseMobile: () => void;
+  isDesktopOpen: boolean;
+  onToggleDesktop: () => void;
 }
 
 function riskBand(score: number): { color: string; label: string } {
@@ -31,6 +35,8 @@ function riskBand(score: number): { color: string; label: string } {
 export default function Sidebar({
   user, view, onView, onNewScan, onLogout,
   sessions, activeSessionId, onSession,
+  isMobileOpen, onCloseMobile,
+  isDesktopOpen, onToggleDesktop,
 }: SidebarProps) {
   const displayName = `${user.first_name} ${user.last_name}`.trim() || user.email;
   const initials    = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -56,45 +62,69 @@ export default function Sidebar({
   };
 
   return (
-    <aside style={{
-      width: 264, flexShrink: 0,
-      background: '#fff',
-      borderRight: '1px solid var(--color-border)',
-      display: 'flex', flexDirection: 'column',
-      height: '100vh', position: 'sticky', top: 0,
-    }}>
-      {/* Logo */}
-      <div style={{ padding: '18px 18px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{
-          width: 30, height: 30, borderRadius: 8,
-          background: 'var(--color-accent)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
-          <Shield size={16} color="#fff" />
-        </div>
-        <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>
-          Agent Security Tester
-        </span>
-      </div>
+    <>
+      {/* Mobile Backdrop */}
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 z-40 md:hidden"
+          onClick={onCloseMobile}
+        />
+      )}
+      
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 bg-white
+        transition-all duration-300 ease-in-out
+        h-screen md:sticky md:top-0
+        ${isMobileOpen ? 'translate-x-0 w-[264px] border-r border-[var(--color-border)]' : '-translate-x-full w-[264px] border-r border-[var(--color-border)]'}
+        ${isDesktopOpen ? 'md:translate-x-0 md:w-[264px]' : 'md:w-0 md:border-r-0 md:overflow-hidden md:opacity-0'}
+      `}>
+        <div className="w-[264px] flex flex-col h-full">
+          {/* Logo */}
+          <div style={{ padding: '18px 18px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 30, height: 30, borderRadius: 8,
+                background: 'var(--color-accent)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                <Shield size={16} color="#fff" />
+              </div>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                Agent Security Tester
+              </span>
+            </div>
+            {/* Desktop close button */}
+            <button className="hidden md:flex text-[#94a3b8] p-1 hover:text-[#475569] transition-colors" onClick={onToggleDesktop}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/>
+              </svg>
+            </button>
+            {/* Mobile close button */}
+            <button className="md:hidden text-[#94a3b8] p-1" onClick={onCloseMobile}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
 
-      {/* New Scan */}
-      <div style={{ padding: '0 14px 14px' }}>
-        <button
-          onClick={onNewScan}
-          style={{
-            width: '100%', height: 40, borderRadius: 10,
-            background: 'var(--color-accent)', color: '#fff',
-            fontSize: 13, fontWeight: 600, border: 'none',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            cursor: 'pointer', transition: 'background .15s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-accent-hover)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-accent)')}
-        >
-          <Plus size={15} />
-          New Scan
-        </button>
-      </div>
+          {/* New Scan */}
+          <div style={{ padding: '0 14px 14px' }}>
+            <button
+              onClick={onNewScan}
+              style={{
+                width: '100%', height: 40, borderRadius: 10,
+                background: 'var(--color-accent)', color: '#fff',
+                fontSize: 13, fontWeight: 600, border: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                cursor: 'pointer', transition: 'background .15s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--color-accent-hover)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--color-accent)')}
+            >
+              <Plus size={15} />
+              New Scan
+            </button>
+          </div>
 
       {/* Nav */}
       <div style={{ padding: '0 14px', display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -148,36 +178,38 @@ export default function Sidebar({
       </div>
 
       {/* Bottom: Settings + User */}
-      <div style={{ borderTop: '1px solid var(--color-bg-base)', padding: '8px 14px 6px' }}>
-        {navItem('settings', Settings, 'Settings')}
+        <div style={{ borderTop: '1px solid var(--color-bg-base)', padding: '8px 14px 6px' }}>
+          {navItem('settings', Settings, 'Settings')}
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', marginTop: 2, borderRadius: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '50%',
-            background: 'var(--color-accent-soft)', color: 'var(--color-accent)',
-            fontSize: 12, fontWeight: 700,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-          }}>
-            {initials}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', marginTop: 2, borderRadius: 10 }}>
             <div style={{
-              fontSize: 13, fontWeight: 600, color: 'var(--color-text-primary)',
-              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+              width: 32, height: 32, borderRadius: '50%',
+              background: 'var(--color-accent-soft)', color: 'var(--color-accent)',
+              fontSize: 12, fontWeight: 700,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              {displayName}
+              {initials}
             </div>
-            <div style={{ fontSize: 11, color: '#94a3b8' }}>{user.email}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{
+                fontSize: 13, fontWeight: 600, color: 'var(--color-text-primary)',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+              }}>
+                {displayName}
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8' }}>{user.email}</div>
+            </div>
+            <button
+              onClick={onLogout}
+              title="Sign out"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+            >
+              <LogOut size={15} color="#94a3b8" />
+            </button>
           </div>
-          <button
-            onClick={onLogout}
-            title="Sign out"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}
-          >
-            <LogOut size={15} color="#94a3b8" />
-          </button>
         </div>
-      </div>
-    </aside>
+        </div>
+      </aside>
+    </>
   );
 }

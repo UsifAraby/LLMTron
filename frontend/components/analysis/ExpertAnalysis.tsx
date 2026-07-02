@@ -194,7 +194,7 @@ export default function ExpertAnalysis({ onAnalyze, isAnalyzing }: ExpertAnalysi
             disabled={isAnalyzing}
             className="w-4 h-4 rounded accent-green-400"
           />
-          <span className="text-sm text-white group-hover:opacity-80 transition-opacity">
+          <span className="text-sm text-black group-hover:opacity-80 transition-opacity">
             MCP tools / servers
           </span>
           <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -209,7 +209,7 @@ export default function ExpertAnalysis({ onAnalyze, isAnalyzing }: ExpertAnalysi
             disabled={isAnalyzing}
             className="w-4 h-4 rounded accent-green-400"
           />
-          <span className="text-sm text-white group-hover:opacity-80 transition-opacity">
+          <span className="text-sm text-black group-hover:opacity-80 transition-opacity">
             RAG / knowledge base
           </span>
           <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -220,7 +220,7 @@ export default function ExpertAnalysis({ onAnalyze, isAnalyzing }: ExpertAnalysi
 
       {/* Section 1 — Agent Identity */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--color-text-muted)' }}>
+        <p className="text-xs font-semibold uppercase tracking-widest mb-6" style={{ color: 'var(--color-text-muted)' }}>
           1 · Agent Identity
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -286,7 +286,7 @@ export default function ExpertAnalysis({ onAnalyze, isAnalyzing }: ExpertAnalysi
             (leave empty to test all active categories)
           </span>
         </p>
-        <div className="space-y-4">
+        <div className="space-y-8">
           <ScopeSection
             label="Direct Attacks"
             options={VULN_SCOPE_DIRECT}

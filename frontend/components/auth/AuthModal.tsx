@@ -59,13 +59,13 @@ export default function AuthModal({ onAuthenticated }: AuthModalProps) {
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="glass-card p-8 rounded-2xl"
+        className="glass-card p-6 md:p-8 rounded-2xl"
         style={{ boxShadow: '0 0 0 1px rgba(6,214,160,0.1), 0 24px 64px rgba(0,0,0,0.5)' }}
       >
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-2xl mx-auto mb-4 flex items-center justify-center"
-               style={{ background: 'linear-gradient(135deg,#06d6a0,#0ea5e9)', boxShadow: '0 8px 24px rgba(6,214,160,0.3)' }}>
+               style={{ background: '#1d4ed8', boxShadow: '0 8px 24px rgba(29,78,216,0.3)' }}>
             <Shield className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-white">
@@ -86,7 +86,7 @@ export default function AuthModal({ onAuthenticated }: AuthModalProps) {
               onClick={() => switchMode(tab)}
               className="flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
-                background: mode === tab ? 'var(--color-bg-elevated)' : 'transparent',
+                background: mode === tab ? '#d3d6daff' : 'transparent',
                 color: mode === tab ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
                 boxShadow: mode === tab ? 'var(--shadow-card)' : 'none',
               }}
@@ -167,7 +167,7 @@ export default function AuthModal({ onAuthenticated }: AuthModalProps) {
                 className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                 style={{ color: 'var(--color-text-muted)' }}
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
               </button>
             </div>
           </div>

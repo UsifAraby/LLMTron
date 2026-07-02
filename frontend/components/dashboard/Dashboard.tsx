@@ -62,13 +62,13 @@ export default function Dashboard({ token }: DashboardProps) {
   );
 
   return (
-    <div style={{ padding: '28px 32px', animation: 'fadeUp .35s ease' }}>
-      <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--color-text-primary)' }}>Dashboard</div>
-      <div style={{ fontSize: 14, color: '#64748b', marginTop: 4 }}>
+    <div className="p-4 md:p-7 animate-fade-up">
+      <div className="text-[22px] font-bold text-[var(--color-text-primary)]">Dashboard</div>
+      <div className="text-sm text-[#64748b] mt-1">
         Overview across all of your security scans.
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginTop: 24 }}>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         {statCard('Total Scans',    totalScans)}
         {statCard('Open Critical',  openCrit,  'var(--color-critical)', 'var(--color-critical-bd)')}
         {statCard('Avg Risk Score', avgRisk,   'var(--color-risk-high)')}
